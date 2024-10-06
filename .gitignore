@@ -1,0 +1,4 @@
+.venv/
+.venv
+pytorch_pointnet/output/
+pytorch_pointnet/shapenetcore_partanno_segmentation_benchmark_v0/

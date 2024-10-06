@@ -1,0 +1,11 @@
+.idea/*
+*.pyc
+data/*
+output/*
+shapenetcore_partanno_segmentation_benchmark_v0/*
+shapenet_partanno_v0 (Copy)/
+shapenetcore_partanno_seg_benchmark_v0_normal/
+*__pycache__/*
+shapenetcore_partanno_v0.zip
+shapenet_partanno_v0/
+shapenet_partanno_v0.tar.gz
