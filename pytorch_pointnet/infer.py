@@ -1,6 +1,6 @@
 import argparse
 import random
-
+import json
 import numpy as np
 
 import open3d.visualization
@@ -21,6 +21,22 @@ DATASETS = {
     'mnist': PointMNISTDataset
 }
 
+def point_cloud_to_json(pcd):
+    points = list(map(lambda x: list(x), pcd.points))
+    
+    point_cloud_dict = {
+        "points": points
+    }
+    
+    if pcd.has_colors():
+        colors = list(map(lambda x: list(x), pcd.colors))
+        point_cloud_dict["colors"] = colors
+    
+    if pcd.has_normals():
+        normals = list(map(lambda x: list(x), pcd.normals))
+        point_cloud_dict["normals"] = normals
+    
+    return json.dumps(point_cloud_dict, indent=4)
 
 def infer(dataset,
           model_checkpoint,
@@ -68,6 +84,10 @@ def infer(dataset,
         pcd.colors = open3d.utility.Vector3dVector(rgb)
         open3d.visualization.draw_geometries([pcd])
 
+    json_data = point_cloud_to_json(pcd)
+
+    with open("point_cloud.json", "w") as json_file:
+        json_file.write(json_data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
