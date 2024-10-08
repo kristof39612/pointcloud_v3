@@ -9,3 +9,5 @@ shapenetcore_partanno_seg_benchmark_v0_normal/
 shapenetcore_partanno_v0.zip
 shapenet_partanno_v0/
 shapenet_partanno_v0.tar.gz
+output_cls/
+output_seg/
