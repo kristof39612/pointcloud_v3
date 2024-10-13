@@ -1,0 +1,8 @@
+torch
+torchvision
+torchaudio
+numpy
+fastprogress
+datasets
+open3d
+matplotlib
