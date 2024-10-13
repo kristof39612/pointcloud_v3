@@ -1,0 +1,21 @@
+name: Build Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to access the Dockerfile
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t pointcloud/train:latest .
