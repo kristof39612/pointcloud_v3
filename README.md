@@ -54,7 +54,7 @@ To run the Docker container, use:
 ```sh
 docker run -v <OUTPUT_FOLDER>:/trained_model pointcloud/train:latest
 ```
-If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag.
+If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag before the image name.
 
 *Note: **replace <OUTPUT_FOLDER> parameter** with your desired local folder and include ${PWD} if necessary.*
 

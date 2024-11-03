@@ -7,9 +7,9 @@ COPY pytorch_pointnet/model /app/model
 COPY pytorch_pointnet/train.py /app/train.py
 COPY pytorch_pointnet/requirements.txt /app/requirements.txt
 COPY pytorch_pointnet/utils.py /app/utils.py
-COPY pytorch_pointnet/shapenet_partanno_v0.tar.gz /app/shapenet_partanno_v0.tar.gz
+COPY pytorch_pointnet/shapenet_partanno_v0_final.tar.gz /app/shapenet_partanno_v0_final.tar.gz
 
-RUN tar -xzf shapenet_partanno_v0.tar.gz
+RUN tar -xzf shapenet_partanno_v0_final.tar.gz
 
 RUN mkdir -p /trained_model
 
