@@ -55,6 +55,8 @@ To run the Docker container, use:
 docker run -v <OUTPUT_FOLDER>:/trained_model pointcloud/train:latest
 ```
 
+---
+
 #### Building the Docker container for evaluation
 ```sh
 docker build -t pointcloud/eval:latest -f Dockerfile.eval .
@@ -65,9 +67,14 @@ To run the Docker container for evaluation, use:
 docker run -v <OUTPUT_FOLDER>:/trained_model --gpus all pointcloud/eval:latest
 ```
 
+---
+
 If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag before the image name.
 
 *Note: **replace <OUTPUT_FOLDER> parameter** with your desired local folder and include ${PWD} if necessary.*
+
+## Docker compose
+TBA
 
 ## Local setup
 
