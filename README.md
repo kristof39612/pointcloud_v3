@@ -54,9 +54,27 @@ To run the Docker container, use:
 ```sh
 docker run -v <OUTPUT_FOLDER>:/trained_model pointcloud/train:latest
 ```
-If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag.
+
+---
+
+#### Building the Docker container for evaluation
+```sh
+docker build -t pointcloud/eval:latest -f Dockerfile.eval .
+```
+#### Running the Docker Container for evaluation
+To run the Docker container for evaluation, use:
+```sh
+docker run -v <OUTPUT_FOLDER>:/trained_model --gpus all pointcloud/eval:latest
+```
+
+---
+
+If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag before the image name.
 
 *Note: **replace <OUTPUT_FOLDER> parameter** with your desired local folder and include ${PWD} if necessary.*
+
+## Docker compose
+TBA
 
 ## Local setup
 
@@ -84,6 +102,11 @@ python train.py shapenet shapenet_partanno_v0 segmentation output_seg --number_o
 ### Infering with models
 
 A front-end with a graphical user interface (GUI) will be provided. This front-end will interact with the models via an API, allowing users to easily test and visualize the results of classification and segmentation tasks.
+
+#### Via our interface
+- TBA
+
+#### Via Open3D (Command line call)
 
 For the inference script locally with the **trained classification** model, run:
 ```sh

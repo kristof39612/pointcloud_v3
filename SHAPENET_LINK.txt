@@ -1,6 +1,12 @@
-https://kutdiak-my.sharepoint.com/:u:/g/personal/lovacsi_kristof_kutdiak_hu/EbGtELPRJXVMp60P3bThpXMBtwVnAj_PHoEqGNdEvuuxsg?e=kITrg6
+Shapenet_partanno_v0 UNTRIMMED:
+https://kutdiak-my.sharepoint.com/:u:/g/personal/lovacsi_kristof_kutdiak_hu/EbGtELPRJXVMp60P3bThpXMBtwVnAj_PHoEqGNdEvuuxsg
 
-link lejár nov 5.
+link lejár dec 3.
+
+Shapenet_partanno_v0 FINAL:
+https://kutdiak-my.sharepoint.com/:u:/g/personal/lovacsi_kristof_kutdiak_hu/ERay9jHrqDxMt9K1TbfKZvABugEQFbuAY3_70O9o-Nhc3w?e=0UzDeg
+
+link lejár dec 3. (REPO-ban benne GIT LFS-ként)
 
 PartNet Dataset Pre-release V0
 You can now download PartNet pre-release v0. The data is released under the ShapeNet terms of use. Note that we are still working on refining the data, and pruning out errors to prepare the official release.

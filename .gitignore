@@ -5,3 +5,9 @@ pytorch_pointnet/shapenetcore_partanno_segmentation_benchmark_v0/
 pytorch_pointnet/shapenet_partanno_v0_final/
 .winenv
 .winenv/
+TM/*
+TM
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
