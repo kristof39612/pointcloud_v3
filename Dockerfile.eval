@@ -15,7 +15,8 @@ RUN mkdir -p /trained_model
 
 RUN pip install --no-cache -r requirements.txt
 
-COPY pytorch_pointnet/run_training.sh /app/run_training.sh
-RUN chmod +x run_training.sh
+COPY pytorch_pointnet/eval_trained.py /app/eval_trained.py
+COPY pytorch_pointnet/run_evals.sh /app/run_evals.sh
+RUN chmod +x run_evals.sh
 
-CMD ["/bin/bash", "run_training.sh"]
+CMD ["/bin/bash", "run_evals.sh"]
