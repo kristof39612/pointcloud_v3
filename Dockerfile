@@ -10,7 +10,7 @@ COPY pytorch_pointnet/utils.py /app/utils.py
 COPY pytorch_pointnet/shapenet_partanno_v0_final.tar.gz /app/shapenet_partanno_v0_final.tar.gz
 
 RUN tar -xzf shapenet_partanno_v0_final.tar.gz
-
+RUN rm shapenet_partanno_v0_final.tar.gz
 RUN mkdir -p /trained_model
 
 RUN pip install -r requirements.txt
