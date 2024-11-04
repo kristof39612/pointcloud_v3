@@ -1,13 +1,23 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, Request, Response, UploadFile
 from fastapi.exceptions import HTTPException
 from starlette.responses import RedirectResponse
+from starlette.status import HTTP_200_OK, HTTP_415_UNSUPPORTED_MEDIA_TYPE
 import torch
 import numpy as np
 from model.pointnet import ClassificationPointNet, SegmentationPointNet
+from fastapi.middleware.cors import CORSMiddleware
 from datasets import ShapeNetDataset
 import random
 
 app = FastAPI(title="Pointcloud model interactor")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_headers=["*"],
+    allow_methods=["*"],
+    allow_credentials=True
+)
 
 @app.get("/", include_in_schema = False)
 async def redirect_to_docs():
@@ -18,7 +28,7 @@ async def redirect_to_docs():
 async def health_check():
     return {"status": "OK"}
 
-model_checkpoint_dir = "TM/"
+model_checkpoint_dir = "/trained_model/"
 
 def load_classification_model():
     model_checkpoint = model_checkpoint_dir + "output_cls/shapenet_classification_model.pth"
@@ -57,7 +67,57 @@ def point_cloud_to_json(points, colors=None):
 classification_model, classification_device = load_classification_model()
 segmentation_model, segmentation_device = load_segmentation_model()
 
-@app.post("/classify")
+@app.post("/octetclassify")
+async def upload_octet_stream(request: Request):
+    # Read the raw binary data from the request
+    data = await request.body()
+    points = np.frombuffer(data, dtype=np.float32)
+    if points.size % 3 != 0:
+        raise HTTPException(status_code=400, detail="Invalid point cloud data")
+    points = points.reshape(-1, 3)
+    points = torch.from_numpy(points)
+    points = points.to(classification_device).unsqueeze(0)
+    # Do something with `data`, like saving it to a file, processing, etc.
+    # In this example, we're just printing the length of the data received
+    with torch.no_grad():
+        preds, _ = classification_model(points)
+        preds = preds.data.max(1)[1]
+        detected_class_id = int(preds.item())
+
+    return {"detected_class_id": detected_class_id}
+
+@app.post("/octetsegment")
+async def segment_endpoint(request: Request):
+    returnval = {
+        "colors": None
+    }
+    data = await request.body()
+    points = np.frombuffer(data, dtype=np.float32)
+    if points.size % 3 != 0:
+        raise HTTPException(status_code=400, detail="Invalid point cloud data")
+    points = points.reshape(-1, 3)
+    points = torch.from_numpy(points)
+    points = points.to(classification_device).unsqueeze(0)
+    # Continue processing...
+
+    with torch.no_grad():
+        preds, _ = segmentation_model(points)
+        preds = preds.view(-1, preds.shape[-1])
+        preds = preds.data.max(1)[1]
+        preds = preds.cpu().numpy()
+
+    #points_np = points.cpu().numpy().squeeze()
+    num_classes = ShapeNetDataset.NUM_SEGMENTATION_CLASSES
+    colors = [(random.randrange(256)/255, random.randrange(256)/255, random.randrange(256)/255)
+                  for _ in range(num_classes)]
+    rgb = [colors[p] for p in preds]
+    rgb = np.array(rgb)
+    
+    returnval["colors"] = rgb.tolist()
+
+    return returnval
+
+@app.post("/classifyPTSFile")
 async def classify_endpoint(file: UploadFile = File(...)):
     if not file.filename.endswith('.pts'):
         raise HTTPException(status_code=400, detail="Only .pts files are accepted.")
@@ -73,7 +133,7 @@ async def classify_endpoint(file: UploadFile = File(...)):
 
     return {"detected_class_id": detected_class_id}
 
-@app.post("/segment")
+@app.post("/segmentPTSFile")
 async def segment_endpoint(file: UploadFile = File(...)):
     returnval = {
         "colors": None

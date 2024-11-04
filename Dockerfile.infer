@@ -1,0 +1,19 @@
+FROM pytorch/pytorch:latest
+
+WORKDIR /app
+
+COPY pytorch_pointnet/datasets.py /app/datasets.py
+COPY pytorch_pointnet/model /app/model
+COPY pytorch_pointnet/api.py /app/api.py
+COPY pytorch_pointnet/utils.py /app/utils.py
+
+COPY pytorch_pointnet/requirements_API.txt /app/requirements.txt
+
+RUN mkdir -p /trained_model
+
+RUN pip install --no-cache -r requirements.txt
+RUN rm requirements.txt
+
+EXPOSE 31400
+
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "31400"]

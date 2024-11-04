@@ -13,7 +13,7 @@ RUN tar -xzf shapenet_partanno_v0_final.tar.gz
 RUN rm shapenet_partanno_v0_final.tar.gz
 RUN mkdir -p /trained_model
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache -r requirements.txt
 
 COPY pytorch_pointnet/run_training.sh /app/run_training.sh
 RUN chmod +x run_training.sh
