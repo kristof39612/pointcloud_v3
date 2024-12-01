@@ -6,3 +6,5 @@ fastprogress
 datasets
 open3d
 matplotlib
+scikit-learn
+ipykernel

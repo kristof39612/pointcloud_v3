@@ -50,7 +50,7 @@ def infer(dataset,
                          point_dimension=DATASETS[dataset].POINT_DIMENSION)
     if torch.cuda.is_available():
         model.cuda()
-    model.load_state_dict(torch.load(model_checkpoint))
+    model.load_state_dict(torch.load(model_checkpoint,weights_only=True))
 
     points = DATASETS[dataset].prepare_data(point_cloud_file)
     points = torch.tensor(points)

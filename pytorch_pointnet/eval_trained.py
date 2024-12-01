@@ -1,6 +1,7 @@
 import argparse
 import torch
 from torch.utils.data import DataLoader
+from torch.utils.data import Subset
 
 # Import ShapeNetDataset and model classes
 from datasets import ShapeNetDataset
@@ -76,6 +77,27 @@ if __name__ == '__main__':
         shuffle=False,
         num_workers=args.num_workers
     )
+    # Calculate class weights for balancing
+    if(args.task == 'classification'):
+        class_counts = {}
+        for _, target in test_dataset:
+            category = target.item() if args.task == 'classification' else target.view(-1).max().item()
+            if category in class_counts:
+                class_counts[category] += 1
+            else:
+                class_counts[category] = 1
+    
+        class_weights = {category: 1.0 / count for category, count in class_counts.items()}
+        sample_weights = [class_weights[target.item() if args.task == 'classification' else target.view(-1).max().item()] for _, target in test_dataset]
+    
+        sampler = torch.utils.data.WeightedRandomSampler(sample_weights, len(sample_weights))
+    
+        test_loader = DataLoader(
+            test_dataset,
+            batch_size=args.batch_size,
+            sampler=sampler,
+            num_workers=args.num_workers
+        )
 
     # Load model
     if args.task == 'classification':
@@ -91,7 +113,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('Unknown task!')
 
-    model.load_state_dict(torch.load(args.model_checkpoint))
+    model.load_state_dict(torch.load(args.model_checkpoint,weights_only=True))
     model.to(device)
 
     # Evaluate model

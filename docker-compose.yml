@@ -1,0 +1,22 @@
+services:
+  point_cloud_client:
+    container_name: point_cloud_client
+    restart: always
+    build:
+      context: ./point_cloud_client
+      dockerfile: Dockerfile
+    environment:
+      - PUBLIC_API_URL=http://localhost:31400
+      - PORT=8080
+    ports:
+      - "8080:8080"
+  inference_api:
+    container_name: inference_api
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.infer
+    volumes:
+      - ./pytorch_pointnet/TM:/trained_model      # REPLACE THIS WITH YOUR OWN PATH!!!!!
+    ports:
+      - "31400:31400"

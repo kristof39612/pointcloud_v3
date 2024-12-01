@@ -9,8 +9,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from datasets import ShapeNetDataset
 import random
 
-app = FastAPI(title="Pointcloud model interactor")
+app_metadata = {
+    "description": "API for interacting with PointNet models for classification and segmentation of point clouds.",
+    "version": "1.0.0",
+    "contact": {
+        "name": "Lovácsi Kristóf",
+        "email": "lovacsi.kristof@gmail.com",
+    },
+}
 
+app = FastAPI(
+    title="Pointcloud model interactor",
+    description=app_metadata["description"],
+    version=app_metadata["version"],
+    contact=app_metadata["contact"],
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,7 +36,6 @@ app.add_middleware(
 async def redirect_to_docs():
     return RedirectResponse(url="/docs")
 
-# Additional idea: Add a health check endpoint
 @app.get("/health")
 async def health_check():
     return {"status": "OK"}
@@ -75,10 +87,8 @@ async def upload_octet_stream(request: Request):
     if points.size % 3 != 0:
         raise HTTPException(status_code=400, detail="Invalid point cloud data")
     points = points.reshape(-1, 3)
-    points = torch.from_numpy(points)
+    points = torch.from_numpy(points.copy())
     points = points.to(classification_device).unsqueeze(0)
-    # Do something with `data`, like saving it to a file, processing, etc.
-    # In this example, we're just printing the length of the data received
     with torch.no_grad():
         preds, _ = classification_model(points)
         preds = preds.data.max(1)[1]
@@ -96,7 +106,7 @@ async def segment_endpoint(request: Request):
     if points.size % 3 != 0:
         raise HTTPException(status_code=400, detail="Invalid point cloud data")
     points = points.reshape(-1, 3)
-    points = torch.from_numpy(points)
+    points = torch.from_numpy(points.copy())
     points = points.to(classification_device).unsqueeze(0)
     # Continue processing...
 
@@ -123,7 +133,7 @@ async def classify_endpoint(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Only .pts files are accepted.")
     file_contents = await file.read()
     point_cloud_data = np.loadtxt(file_contents.decode('utf-8').splitlines()).astype(np.float32)
-    points = torch.from_numpy(point_cloud_data)
+    points = torch.from_numpy(point_cloud_data.copy())
     points = points.to(classification_device).unsqueeze(0)
 
     with torch.no_grad():
@@ -142,7 +152,7 @@ async def segment_endpoint(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Only .pts files are accepted.")
     file_contents = await file.read()
     point_cloud_data = np.loadtxt(file_contents.decode('utf-8').splitlines()).astype(np.float32)
-    points = torch.from_numpy(point_cloud_data)
+    points = torch.from_numpy(point_cloud_data.copy())
     points = points.to(segmentation_device).unsqueeze(0)
     # Continue processing...
 
