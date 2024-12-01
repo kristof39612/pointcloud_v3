@@ -10,6 +10,21 @@ from model.pointnet import ClassificationPointNet, SegmentationPointNet
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, jaccard_score
 
 def evaluate(model, dataloader, device, task):
+    """
+    Evaluate the performance of a trained model on a given task.
+    Parameters:
+    model (torch.nn.Module): The trained model to evaluate.
+    dataloader (torch.utils.data.DataLoader): DataLoader providing the evaluation dataset.
+    device (torch.device): The device to run the evaluation on (e.g., 'cpu' or 'cuda').
+    task (str): The task type, either 'classification' or 'segmentation'.
+    Raises:
+    ValueError: If the task is not 'classification' or 'segmentation'.
+    For classification task:
+    - Computes and prints the accuracy, precision, recall, F1 score, and confusion matrix.
+    For segmentation task:
+    - Computes and prints the accuracy, mean IoU, and Dice coefficient.
+    """
+
     model.eval()
     with torch.no_grad():
         data_iter = iter(dataloader)
