@@ -1,3 +1,4 @@
+"""Module for loading ShapeNet and PointMNIST datasets."""
 import json
 import os
 import csv
@@ -48,7 +49,7 @@ class ShapeNetDataset(data.Dataset):
         self.task = task
         self.train = train
 
-        category_file = os.path.join(self.dataset_folder, 'synsetoffset2category.txt')
+        category_file = os.path.join(self.dataset_folder, 'synsetoffset2category.txt')          #Offsetcategories
         self.folders_to_classes_mapping = {}
         self.segmentation_classes_offset = {}
 
@@ -69,9 +70,9 @@ class ShapeNetDataset(data.Dataset):
             filenames = json.load(fid)
 
         self.files = [(f.split('/')[1], f.split('/')[2]) for f in filenames]
-        np.random.shuffle(self.files)
+        np.random.shuffle(self.files)           #Shuffle the files again
 
-    def __getitem__(self, index):
+    def __getitem__(self, index):               #Get the data from the dataset according to task type
         folder, file = self.files[index]
         point_file = os.path.join(self.dataset_folder,
                                   folder,
@@ -102,6 +103,9 @@ class ShapeNetDataset(data.Dataset):
                      point_cloud_class=None,
                      segmentation_label_file=None,
                      segmentation_classes_offset=None):
+        """
+        Prepares the data for the ShapeNet dataset.
+        """
         point_cloud = np.loadtxt(point_file).astype(np.float32)
         if number_of_points:
             sampling_indices = np.random.choice(point_cloud.shape[0], number_of_points)

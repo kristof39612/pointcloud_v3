@@ -22,6 +22,16 @@ DATASETS = {
 }
 
 def point_cloud_to_json(pcd):
+    """
+    Converts a point cloud object to a JSON string.
+    Args:
+        pcd: A point cloud object that contains points, and optionally colors and normals.
+    Returns:
+        A JSON string representation of the point cloud. The JSON object contains:
+            - "points": A list of points, where each point is represented as a list of coordinates.
+            - "colors" (optional): A list of colors corresponding to the points, where each color is represented as a list of RGB values.
+            - "normals" (optional): A list of normals corresponding to the points, where each normal is represented as a list of normal vector components.
+    """
     points = list(map(lambda x: list(x), pcd.points))
     
     point_cloud_dict = {
@@ -38,10 +48,20 @@ def point_cloud_to_json(pcd):
     
     return json.dumps(point_cloud_dict, indent=4)
 
-def infer(dataset,
-          model_checkpoint,
-          point_cloud_file,
-          task):
+def infer(dataset, model_checkpoint, point_cloud_file, task):
+    """
+    Perform inference on a point cloud using a pre-trained model.
+    Args:
+        dataset (str): The name of the dataset to use.
+        model_checkpoint (str): Path to the model checkpoint file.
+        point_cloud_file (str): Path to the point cloud file to be inferred.
+        task (str): The task to perform, either 'classification' or 'segmentation'.
+    This function loads a pre-trained model, prepares the point cloud data, 
+    performs inference, and visualizes the results. For classification tasks, 
+    it prints the detected class and visualizes the point cloud. For segmentation 
+    tasks, it colors the points based on the predicted classes and visualizes the 
+    colored point cloud. The point cloud data is also saved to a JSON file.
+    """
     if task == 'classification':
         num_classes = DATASETS[dataset].NUM_CLASSIFICATION_CLASSES
     elif task == 'segmentation':
