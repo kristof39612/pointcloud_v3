@@ -69,6 +69,7 @@ class ShapeNetDataset(data.Dataset):
             filenames = json.load(fid)
 
         self.files = [(f.split('/')[1], f.split('/')[2]) for f in filenames]
+        np.random.shuffle(self.files)
 
     def __getitem__(self, index):
         folder, file = self.files[index]
