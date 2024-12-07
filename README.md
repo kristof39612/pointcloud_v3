@@ -87,7 +87,7 @@ docker run -v <OUTPUT_FOLDER>:/trained_model -p 31400:31400 --gpus all pointclou
 
 If you want to use GPU-s with the Docker container pass along the ```--gpus all``` flag before the image name.
 
-*Note: **replace <OUTPUT_FOLDER> parameter** with your desired local folder and include ${PWD} if necessary.*
+*Note: **replace <OUTPUT_FOLDER> parameter** with your desired local folder and include ${PWD} if necessary. **The directory must include the trained models in the output_seg and output_cls subfolders**, if not the evaluation WILL fail!*
 
 ## Docker compose
 Provided in the repo only for the final web interface and our internal inference API. See instructions below **(Infering with models)**.
