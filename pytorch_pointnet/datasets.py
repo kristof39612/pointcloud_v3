@@ -1,14 +1,11 @@
-"""Module for loading ShapeNet and PointMNIST datasets."""
+"""Module for loading ShapeNet dataset."""
 import json
 import os
 import csv
 import torch.utils.data as data
 import torch
-from torchvision.datasets import MNIST
 
 import numpy as np
-
-from PIL import Image
 
 from utils import transform_2d_img_to_point_cloud
 
@@ -123,29 +120,3 @@ class ShapeNetDataset(data.Dataset):
             return point_cloud, point_cloud_class
         else:
             return point_cloud
-
-
-class PointMNISTDataset(MNIST):
-
-    NUM_CLASSIFICATION_CLASSES = 10
-
-    POINT_DIMENSION = 2
-
-    def __init__(self, *args, **kwargs):
-        kwargs.pop('task')
-        self.number_of_points = kwargs.pop('number_of_points')
-        kwargs['download'] = True
-        super(PointMNISTDataset, self).__init__(*args, **kwargs)
-        self.transform = transform_2d_img_to_point_cloud
-
-    def __getitem__(self, index):
-        img, target = super(PointMNISTDataset, self).__getitem__(index)
-        sampling_indices = np.random.choice(img.shape[0], self.number_of_points)
-        img = img[sampling_indices, :].astype(np.float32)
-        img = torch.tensor(img)
-        return img, target
-
-    @staticmethod
-    def prepare_data(image_file):
-        img = Image.open(image_file)
-        return transform_2d_img_to_point_cloud(img)
