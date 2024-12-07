@@ -9,7 +9,7 @@ import numpy as np
 
 from fastprogress import master_bar, progress_bar
 
-from datasets import ShapeNetDataset, PointMNISTDataset
+from datasets import ShapeNetDataset
 from model.pointnet import ClassificationPointNet, SegmentationPointNet
 from utils import plot_losses, plot_accuracies
 
@@ -21,7 +21,6 @@ MODELS = {
 
 DATASETS = {
     'shapenet': ShapeNetDataset,
-    'mnist': PointMNISTDataset
 }
 
 
@@ -163,7 +162,7 @@ def train(dataset,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('dataset', type=str, choices=['shapenet', 'mnist'], help='dataset to train on')
+    parser.add_argument('dataset', type=str, choices=['shapenet'], help='dataset to train on')
     parser.add_argument('dataset_folder', type=str, help='path to the dataset folder')
     parser.add_argument('task', type=str, choices=['classification', 'segmentation'], help='type of task')
     parser.add_argument('output_folder', type=str, help='output folder')

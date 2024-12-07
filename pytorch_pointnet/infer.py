@@ -9,7 +9,7 @@ import torch
 import open3d
 
 from model.pointnet import ClassificationPointNet, SegmentationPointNet
-from datasets import ShapeNetDataset, PointMNISTDataset
+from datasets import ShapeNetDataset
 
 MODELS = {
     'classification': ClassificationPointNet,
@@ -18,7 +18,6 @@ MODELS = {
 
 DATASETS = {
     'shapenet': ShapeNetDataset,
-    'mnist': PointMNISTDataset
 }
 
 def point_cloud_to_json(pcd):
@@ -111,7 +110,7 @@ def infer(dataset, model_checkpoint, point_cloud_file, task):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('dataset', choices=['shapenet', 'mnist'], type=str, help='dataset to train on')
+    parser.add_argument('dataset', choices=['shapenet'], type=str, help='dataset to train on')
     parser.add_argument('model_checkpoint', type=str, help='dataset to train on')
     parser.add_argument('point_cloud_file', type=str, help='path to the point cloud file')
     parser.add_argument('task', type=str, choices=['classification', 'segmentation'], help='type of task')

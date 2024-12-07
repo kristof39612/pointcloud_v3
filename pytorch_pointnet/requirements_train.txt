@@ -1,0 +1,9 @@
+torch
+torchvision
+torchaudio
+numpy
+fastprogress
+datasets
+matplotlib
+scikit-learn
+ipykernel
